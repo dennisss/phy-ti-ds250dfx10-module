@@ -9,6 +9,7 @@
 #include <linux/module.h>
 #include <linux/phy.h>
 #include <linux/phy/phy.h>
+#include <linux/version.h>
 
 #define DS250DF410_REG_CHAN_CONFIG_ID 0xEF
 #define DS250DF410_MASK_CHAN_CONFIG_ID GENMASK(3, 0)
@@ -261,7 +262,11 @@ static const struct phy_ops ds250dfx10_phy_ops = {
 	.owner		= THIS_MODULE,
 };
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)
+static struct phy *ds250dfx10_of_xlate(struct device *dev, const struct of_phandle_args *args)
+#else
 static struct phy *ds250dfx10_of_xlate(struct device *dev, struct of_phandle_args *args)
+#endif
 {
 	struct ds250dfx10_priv *phy_priv = dev_get_drvdata(dev);
 	int channel;
